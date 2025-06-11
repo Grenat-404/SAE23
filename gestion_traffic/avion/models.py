@@ -12,7 +12,7 @@ class Pistes(models.Model):
     aréoports = models.CharField(max_length=100, blank=False)
     longueur = models.IntegerField(blank = False)
     def __str__(self):
-        return self.nom
+        return self.num
 
 class Compagnies(models.Model):
     nom = models.CharField(max_length=100, blank=False)
@@ -28,15 +28,21 @@ class Types(models.Model):
     image = models.ImageField(upload_to='chateaux/', blank=True, null=True)
     longueur = models.IntegerField(blank = False)
     def __str__(self):
-        return self.nom
+        return self.marque
 
 class Avions(models.Model):
-
+    nom = models.CharField(max_length=100, blank=False)
+    compagnie = models.CharField(blank=True)
+    modele = models.CharField(max_length=100, blank=False)
     def __str__(self):
         return self.nom
 
 class Vols(models.Model):
-
-    longueur = models.IntegerField(blank = False)
+    avion = models.CharField(max_length=100, blank=False)
+    pilote = models.CharField(max_length=100, blank=False)
+    aréoports_dep = models.CharField(max_length=100, blank=False)
+    h_dep = models.DateTimeField()
+    aréoports_arr = models.CharField(max_length=100, blank=False)
+    h_arr = models.DateTimeField()
     def __str__(self):
         return self.nom
