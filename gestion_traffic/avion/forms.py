@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from . import models
 class avionsForm(ModelForm):
     class Meta:
-        model = models.Region
+        model = models.Avions
         fields = ('nom', 'date_crea', 'nbr_dep', 'superficie', 'info', 'image')
         labels = {
         'nom' : _('Nom de Région'),
