@@ -45,4 +45,4 @@ class Vols(models.Model):
     aréoports_arr = models.CharField(max_length=100, blank=False)
     h_arr = models.DateTimeField()
     def __str__(self):
-        return self.nom
+        return self.avion
