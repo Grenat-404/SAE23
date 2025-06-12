@@ -8,8 +8,8 @@ from django.http import HttpResponseRedirect
 
 # Create your views here.
 def index(request):
-     Areoports = models.Areoports.objects.all()
-     return render(request, "avion/index.html", {"Areoports": Areoports})
+     Aeroports = models.Aeroports.objects.all()
+     return render(request, "avion/index.html", {"Aeroports": Aeroports})
 
 
 #Aréoports
