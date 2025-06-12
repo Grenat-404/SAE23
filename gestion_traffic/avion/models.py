@@ -25,7 +25,7 @@ class Types(models.Model):
     marque = models.CharField(max_length=100, blank=False)
     modele = models.CharField(max_length=100, blank=False)
     description = models.CharField(max_length=100, blank=False)
-    #image = models.ImageField(upload_to='avions/', blank=True, null=True)
+    image = models.ImageField(upload_to='avions/', blank=True, null=True)
     longueur = models.IntegerField(blank = False)
     def __str__(self):
         return self.marque

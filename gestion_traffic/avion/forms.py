@@ -35,12 +35,12 @@ class compagniesForm(ModelForm):
 class typesForm(ModelForm):
     class Meta:
         model = models.Types
-        fields = ('marque', 'modele', 'description', 'longueur')
+        fields = ('marque', 'modele', 'description', 'images', 'longueur')
         labels = {
         'marque' : _('Nom de Région'),
         'modele' : _('Date de Création') ,
         'description' : _('Nombre de Départements'),
-        #'images' : _('URL de la photo'),
+        'images' : _('URL de la photo'),
         'longueur': _(' longueur de piste nécessaire'),
         }
 
