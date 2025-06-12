@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect
 # Create your views here.
 def index(request):
      Areoports = models.Areoports.objects.all()
-    return render(request, "avion/index.html", {"Areoports": Areoports})
+     return render(request, "avion/index.html", {"Areoports": Areoports})
 
 
 #Aréoports
