@@ -1,10 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}Château ajouté{% endblock %}
+
+{% block content %}
+<div class="confirmation-container">
+    <h1>{{ Chateau.nom }}</h1>
+
+    {% if Chateau.image %}
+    <div style="text-align: center; margin-bottom: 1rem;">
+        <a href="#chateau-lightbox">
+            <img src="{{ Chateau.image.url }}" alt="Image du château" class="thumbnail">
+        </a>
+    </div>
+
+    <div id="chateau-lightbox" class="lightbox-container">
+        <a href="#">
+            <img src="{{ Chateau.image.url }}" alt="Château en grand">
+        </a>
+    </div>
+{% endif %}
+
+    <ul class="chateau-details">
+        <li><strong>Date de création :</strong> {{ Chateau.date_crea }}</li>
+        <li><strong>Région associée :</strong> {{ Chateau.ch_region.nom }}</li>
+        <li><strong>Département :</strong> {{ Chateau.dep }}</li>
+        <li><strong>Informations complémentaires :</strong> {{ Chateau.info|default:"Aucune information fournie." }}</li>
+    </ul>
+
+    <div class="action-links">
+        <a href="{% url 'updateChateau' Chateau.id %}">Modifier ce château</a>
+        <a href="{% url 'deleteChateau' Chateau.id %}">Supprimer ce château</a>
+        <a href="/">Retour</a>
+    </div>
+</div>
+{% endblock %}

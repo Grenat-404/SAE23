@@ -1,10 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}Détails de la Région{% endblock %}
+{% block navbar %}
+<nav>
+    <a href="{% url 'ajoutChateau' %}">Ajouter un nouveau château</a>
+</nav>
+{% endblock %}
+{% block content %}
+<div class="region-container">
+    <h1>{{ Region.nom }}</h1>
+
+    {% if Region.image %}
+    <div style="text-align: center; margin-bottom: 1rem;">
+        <a href="#region-lightbox">
+            <img src="{{ Region.image.url }}" alt="Image de la région" class="thumbnail">
+        </a>
+    </div>
+
+    <div id="region-lightbox" class="lightbox-container">
+        <a href="#">
+            <img src="{{ Region.image.url }}" alt="Région en grand">
+        </a>
+    </div>
+{% endif %}
+
+    <ul class="region-details">
+        <li><strong>Date de création :</strong> {{ Region.date_crea }}</li>
+        <li><strong>Nombre de départements :</strong> {{ Region.nbr_dep }}</li>
+        <li><strong>Superficie :</strong> {{ Region.superficie }} km²</li>
+        <li><strong>Informations complémentaires :</strong> {{ Region.info|default:"Aucune information fournie." }}</li>
+    </ul>
+
+    <div class="action-links">
+        <a href="{% url 'updateRegion' Region.id %}">Modifier la région</a>
+        <a href="{% url 'deleteRegion' Region.id %}">Supprimer la région</a>
+        <a href="/">Retour</a>
+    </div>
+</div>
+
+<h2 style="text-align:center; margin-top: 3rem;">Châteaux associés</h2>
+<div class="card-container">
+    {% for chateau in chateaux %}
+        <div class="card">
+            <a href="{% url 'afficheChateau' chateau.id %}">{{ chateau.nom }}</a>
+            <p><strong>Créé en :</strong> {{ chateau.date_crea }}</p>
+            <p><strong>Département :</strong> {{ chateau.dep }}</p>
+        </div>
+    {% empty %}
+        <p>Aucun château associé à cette région.</p>
+    {% endfor %}
+</div>
+{% endblock %}
