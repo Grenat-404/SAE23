@@ -3,9 +3,9 @@
 {% block title %}Ajouter un Aéroport{% endblock %}
 
 {% block content %}
-    <h1>Ajouter unnouveau Aéroport</h1>
+    <h1>Ajouter un nouvel Aéroport</h1>
 
-    <form method="post" action="{% url 'traitementAeroportAjout' %}" enctype="multipart/form-data">
+    <form method="post" action="{% url 'traitementAeroportsAjout' %}" enctype="multipart/form-data">
         {% csrf_token %}
         <ul style="list-style-type: none; padding: 0;">
             {{ form.as_ul }}

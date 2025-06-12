@@ -1,10 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}Ajouter un type d'Avion{% endblock %}
+
+{% block content %}
+    <h1>Ajouter un nouveau type d'Avion</h1>
+
+    <form method="post" action="{% url 'traitementTypesAjout' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <ul style="list-style-type: none; padding: 0;">
+            {{ form.as_ul }}
+        </ul>
+        <input type="submit" value="Envoyer les données">
+    </form>
+{% endblock %}

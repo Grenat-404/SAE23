@@ -33,7 +33,7 @@ class Types(models.Model):
 class Avions(models.Model):
     nom = models.CharField(max_length=100, blank=False)
     compagnie = models.ForeignKey(Compagnies, on_delete=models.CASCADE)
-    modele = models.CharField(max_length=100, blank=False)
+    modele = models.ForeignKey(Types, on_delete=models.CASCADE)
     def __str__(self):
         return self.nom
 

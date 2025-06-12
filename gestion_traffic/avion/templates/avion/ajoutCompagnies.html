@@ -1,10 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}Ajouter une Compagnie{% endblock %}
+
+{% block content %}
+    <h1>Ajouter une nouvelle Compagnie</h1>
+
+    <form method="post" action="{% url 'traitementCompagniesAjout' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <ul style="list-style-type: none; padding: 0;">
+            {{ form.as_ul }}
+        </ul>
+        <input type="submit" value="Envoyer les données">
+    </form>
+{% endblock %}
