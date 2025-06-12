@@ -15,7 +15,7 @@ class areoportsForm(ModelForm):
 class pistesForm(ModelForm):
     class Meta:
         model = models.Pistes
-        fields = ('num', 'aréoports', 'longueur')
+        fields = ('num', 'areoports', 'longueur')
         labels = {
         'num' : _('Numéro de la piste'),
         'aréoports' : _("Aréoport d'appartennance") ,
@@ -35,12 +35,12 @@ class compagniesForm(ModelForm):
 class typesForm(ModelForm):
     class Meta:
         model = models.Types
-        fields = ('marque', 'modele', 'description', 'images', 'longueur')
+        fields = ('marque', 'modele', 'description', 'longueur')
         labels = {
         'marque' : _('Nom de Région'),
         'modele' : _('Date de Création') ,
         'description' : _('Nombre de Départements'),
-        'images' : _('URL de la photo'),
+        #'images' : _('URL de la photo'),
         'longueur': _(' longueur de piste nécessaire'),
         }
 
@@ -58,12 +58,12 @@ class avionsForm(ModelForm):
 class volsForm(ModelForm):
     class Meta:
         model = models.Vols
-        fields = ('avions', 'pilote', 'aréoports_dep', 'h_dep', 'aréoports_arr', 'h_arr')
+        fields = ('avions', 'pilote', 'areoports_dep', 'h_dep', 'areoports_arr', 'h_arr')
         labels = {
         'avions' : _('Avion'),
         'pilote' : _('Pilote du vol') ,
-        'aréoports_dep' : _('aéroport de départ'),
+        'areoports_dep' : _('aéroport de départ'),
         'h_dep' : _('date et heure de départ'),
-        'aréoports_arr' : _("aéroport d'arrivée"),
+        'areoports_arr' : _("aéroport d'arrivée"),
         'h_arr' : _("date et heure d'arrivée")
         }

@@ -25,7 +25,7 @@ class Types(models.Model):
     marque = models.CharField(max_length=100, blank=False)
     modele = models.CharField(max_length=100, blank=False)
     description = models.CharField(max_length=100, blank=False)
-    image = models.ImageField(upload_to='avions/', blank=True, null=True)
+    #image = models.ImageField(upload_to='avions/', blank=True, null=True)
     longueur = models.IntegerField(blank = False)
     def __str__(self):
         return self.marque
@@ -38,7 +38,7 @@ class Avions(models.Model):
         return self.nom
 
 class Vols(models.Model):
-    avion = models.CharField(max_length=100, blank=False)
+    avions = models.CharField(max_length=100, blank=False)
     pilote = models.CharField(max_length=100, blank=False)
     areoports_dep = models.CharField(max_length=100, blank=False)
     h_dep = models.DateTimeField()
