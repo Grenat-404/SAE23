@@ -10,15 +10,6 @@
 
 {% block content %}
 <h1>Liste des Aéroports</h1>
+<a href="{% url 'afficheAeroports' x.id %}">Voir les détails</a>
 
-<div class="card-container">
-    {% for x in Aeroports %}
-        <div class="card">
-            <h3>{{ x.nom }}</h3>
-            <a href="{% url 'afficheAeroports' x.id %}">Voir les détails</a>
-        </div>
-    {% empty %}
-        <p>Aucun Aéroports trouvé.</p>
-    {% endfor %}
-</div>
 {% endblock %}
