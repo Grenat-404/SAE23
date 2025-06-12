@@ -1,17 +1,11 @@
-{% extends "base.html" %}
-
-{% block title %}Supprimer l'Aéroport{% endblock %}
-
+{% extends 'base.html' %}
+{% block title %}Supprimer Aéroport{% endblock %}
 {% block content %}
-    <h1>Confirmation de suppression</h1>
-
-    <p>Voulez-vous vraiment supprimer l'Aéroport suivant : <strong>{{ Aeroports.nom }}</strong> ?</p>
-
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit" style="background-color: red; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px;">
-            Confirmer la suppression
-        </button>
-        <a href="/" style="margin-left: 1rem;">Annuler</a>
-    </form>
+<h1>Supprimer Aéroport</h1>
+<p>Confirmez la suppression de <strong>{{ object.nom }}</strong>.</p>
+<form method="post">
+  {% csrf_token %}
+  <button type="submit">Oui, supprimer</button>
+  <a href="{% url 'avion:afficheAeroports' %}">Annuler</a>
+</form>
 {% endblock %}

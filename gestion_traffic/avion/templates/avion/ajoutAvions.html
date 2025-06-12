@@ -1,15 +1,11 @@
-{% extends "base.html" %}
-
-{% block title %}Ajouter un Avion{% endblock %}
-
+{% extends 'base.html' %}
+{% block title %}Ajouter Avion{% endblock %}
 {% block content %}
-    <h1>Ajouter un nouvel Avion</h1>
-
-    <form method="post" action="{% url 'traitementAvionsAjout' %}" enctype="multipart/form-data">
-        {% csrf_token %}
-        <ul style="list-style-type: none; padding: 0;">
-            {{ form.as_ul }}
-        </ul>
-        <input type="submit" value="Envoyer les données">
-    </form>
+<h1>Ajouter Avion</h1>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Ajouter</button>
+  <a href="{% url 'avion:afficheAvions' %}">Annuler</a>
+</form>
 {% endblock %}

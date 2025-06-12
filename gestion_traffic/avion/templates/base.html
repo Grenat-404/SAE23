@@ -1,32 +1,29 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <title>{% block title %}Titre de la page{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'avion/style.css' %}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Gestion du trafic aérien{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'avion/style.css' %}">
 </head>
 <body>
-
-    <!-- En-tête général du site -->
-    <header class="site-header">
-        <div class="header-title">
-            <h1 class="titre-site">Gestion du Traffic aérien</h1>
-        </div>
-        <div class="header-nav">
-            {% block navbar %}{% endblock %}
-        </div>
-    </header>
-
-    <!-- Contenu principal -->
-    <main style="max-width: 800px; margin: auto; padding: 2rem; margin-top: 140px;">
-        {% block content %}{% endblock %}
-    </main>
-
-    <!-- Pied de page -->
-    <footer style="text-align: center; margin-top: 3rem; font-size: 0.9em; color: #777;">
-        <p>&copy; 2025 - Application Gestionnaire Traffic Aérien</p>
-    </footer>
-
+  <nav class="navbar">
+    <ul>
+      <li><a href="{% url 'avion:index' %}">Accueil</a></li>
+      <li><a href="{% url 'avion:afficheAeroports' %}">Aéroports</a></li>
+      <li><a href="{% url 'avion:affichePistes' %}">Pistes</a></li>
+      <li><a href="{% url 'avion:afficheCompagnies' %}">Compagnies</a></li>
+      <li><a href="{% url 'avion:afficheTypes' %}">Types d'avion</a></li>
+      <li><a href="{% url 'avion:afficheAvions' %}">Avions</a></li>
+      <li><a href="{% url 'avion:afficheVols' %}">Vols</a></li>
+    </ul>
+  </nav>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+  <footer>
+    <p>&copy; 2025 Gestion Aérienne</p>
+  </footer>
 </body>
 </html>

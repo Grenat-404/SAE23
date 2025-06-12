@@ -1,16 +1,11 @@
-{% extends "base.html" %}
-
-{% block title %}Modifier une Compagnie{% endblock %}
-
+{% extends 'base.html' %}
+{% block title %}Modifier Compagnie{% endblock %}
 {% block content %}
-    <h1>Modifier une Compagnie</h1>
-
-    <form method="post" action="{% url 'traitementCompagniesModif' id=id %}">
-
-        {% csrf_token %}
-        <ul style="list-style-type: none; padding: 0;">
-            {{ form.as_ul }}
-        </ul>
-        <input type="submit" value="Enregistrer les modifications">
-    </form>
+<h1>Modifier Compagnie</h1>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Mettre à jour</button>
+  <a href="{% url 'avion:afficheCompagnies' %}">Annuler</a>
+</form>
 {% endblock %}

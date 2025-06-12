@@ -1,300 +1,215 @@
-from django.shortcuts import render
-from .forms import avionsForm, compagniesForm, typesForm, aeroportsForm
-from .forms import pistesForm
-from .forms import volsForm
+from django.shortcuts import render, get_object_or_404, redirect
+from .forms import aeroportsForm, avionsForm, compagniesForm, pistesForm, typesForm, volsForm
 from . import models
 from django.urls import reverse
-from django.http import HttpResponseRedirect
 
-# Create your views here.
 def index(request):
-     Aeroports = models.Aeroports.objects.all()
-     return render(request, "avion/index.html", {"Aeroports": Aeroports})
+    apts = models.Aeroports.objects.all()
+    return render(request, "index.html", {"Aeroports": apts})
 
+# –– UTILS ––
+def _handle_crud(request, Model, FormClass, template_list, template_add,
+                 template_update, template_delete, context_name, redirect_name, pk_name='id'):
+    """
+    Générique pour LIST / ADD / EDIT / DELETE selon request.path
+    Mais ici on l'appelle manuellement dans chaque view pour plus de clarté.
+    """
+    pass  # on n'utilise pas dans cette version, on garde views séparées
 
-#Aréoports
+# –– Aéroports ––
+def afficheAeroports(request):
+    qs = models.Aeroports.objects.all()
+    return render(request, "avion/afficheAeroports.html", {"object_list": qs})
+
 def ajoutAeroports(request):
-    form = aeroportsForm() # création d'un formulaire vide
-    return render(request,"avion/ajoutAeroports.html",{"form" : form})
-
-def traitementAeroportsAjout(request):
     if request.method == "POST":
-        aeform = avionsForm(request.POST, request.FILES)
-        if aeform.is_valid():
-            Aeroports = aeform.save()
-            return render(request, "avion/afficheAeroports.html", {"Areoports": Aeroports})
-        else:
-            return render(request, "avion/ajoutAeroports.html", {"form": aeform})
+        form = aeroportsForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('avion:afficheAeroports')
     else:
-        return HttpResponseRedirect(reverse('ajoutAeroports'))
-
-def traitementAreoportsModif(request, id):
-    aeform = aeroportsForm(request.POST, request.FILES)
-    if aeform.is_valid():
-        Aeroports = aeform.save(commit=False)
-        Aeroports.id = id
-        Aeroports.save()
-        return render(request, "avion/afficheAeroports.html", {"Aeroports": Aeroports})
-    else:
-        return render(request, "avion/updateAeroports.html", {"form": aeform, "id": id})
-
-def readAeroports(request, id):
-    Aeroports = models.Aeroports.objects.get(pk=id)
-    return render(request,"avion/afficheAeroports.html",{"Aeroports": Aeroports})
-
+        form = aeroportsForm()
+    return render(request, "avion/ajoutAeroports.html", {"form": form})
 
 def updateAeroports(request, id):
-    Aeroports = models.Aeroports.objects.get(pk=id)
+    inst = get_object_or_404(models.Aeroports, pk=id)
     if request.method == "POST":
-        form = aeroportsForm(request.POST)
+        form = aeroportsForm(request.POST, request.FILES, instance=inst)
         if form.is_valid():
-            Aeroports = form.save(commit=False)
-            Aeroports.id = id
-            Aeroports.save()
-            return HttpResponseRedirect('')
+            form.save()
+            return redirect('avion:afficheAeroports')
     else:
-        form = aeroportsForm(instance=Aeroports)
+        form = aeroportsForm(instance=inst)
     return render(request, "avion/updateAeroports.html", {"form": form, "id": id})
 
-
-#Pistes
-def ajoutPistes(request):
-    form = pistesForm() # création d'un formulaire vide
-    return render(request,"avion/ajoutPistes.html",{"form" : form})
-
-def traitementPistesAjout(request):
+def deleteAeroports(request, id):
+    inst = get_object_or_404(models.Aeroports, pk=id)
     if request.method == "POST":
-        pform = pistesForm(request.POST, request.FILES)
-        if pform.is_valid():
-            Pistes = pform.save()
-            return render(request, "avion/affichePistes.html", {"Pistes": Pistes})
-        else:
-            return render(request, "avion/ajoutPistes.html", {"form": pform})
-    else:
-        return HttpResponseRedirect(reverse('ajoutPistes'))
+        inst.delete()
+        return redirect('avion:afficheAeroports')
+    return render(request, "avion/deleteAeroports.html", {"object": inst})
 
-def traitementPistesModif(request, id):
-    pform = pistesForm(request.POST, request.FILES)
-    if pform.is_valid():
-        Pistes = pform.save(commit=False)
-        Pistes.id = id
-        Pistes.save()
-        return render(request, "avion/affichePistes.html", {"Pistes": Pistes})
-    else:
-        return render(request, "avion/updatePistes.html", {"form": pform, "id": id})
+# –– Avions ––
+def afficheAvions(request):
+    qs = models.Avions.objects.all()
+    return render(request, "avion/afficheAvions.html", {"object_list": qs})
 
-def readPistes(request, id):
-    Pistes = models.Pistes.objects.get(pk=id)
-    return render(request,"avion/affichePistes.html",{"Pistes": Pistes})
-
-
-def updatePistes(request, id):
-    Pistes = models.Pistes.objects.get(pk=id)
-    if request.method == "POST":
-        form = pistesForm(request.POST)
-        if form.is_valid():
-            Pistes = form.save(commit=False)
-            Pistes.id = id
-            Pistes.save()
-            return HttpResponseRedirect('')
-    else:
-        form = pistesForm(instance=Pistes)
-    return render(request, "avion/updatePistes.html", {"form": form, "id": id})
-
-
-#Compagnies
-def ajoutCompagnies(request):
-    form = compagniesForm() # création d'un formulaire vide
-    return render(request,"avion/ajoutCompagnies.html",{"form" : form})
-
-def traitementCompagniesAjout(request):
-    if request.method == "POST":
-        cform = compagniesForm(request.POST, request.FILES)
-        if cform.is_valid():
-            Compagnies = cform.save()
-            return render(request, "avion/afficheCompagnies.html", {"Compagnies": Compagnies})
-        else:
-            return render(request, "avion/ajoutCompagnies.html", {"form": cform})
-    else:
-        return HttpResponseRedirect(reverse('ajoutCompagnies'))
-
-def traitementCompagniesModif(request, id):
-    cform = compagniesForm(request.POST, request.FILES)
-    if cform.is_valid():
-        Compagnies = cform.save(commit=False)
-        Compagnies.id = id
-        Compagnies.save()
-        return render(request, "avion/afficheCompagnies.html", {"Compagnies": Compagnies})
-    else:
-        return render(request, "avion/updateCompagnies.html", {"form": cform, "id": id})
-
-def readCompagnies(request, id):
-    Compagnies = models.Compagnies.objects.get(pk=id)
-    return render(request,"avion/afficheCompagnies.html",{"Compagnies": Compagnies})
-
-
-def updateCompagnies(request, id):
-    Compagnies = models.Compagnies.objects.get(pk=id)
-    if request.method == "POST":
-        form = compagniesForm(request.POST)
-        if form.is_valid():
-            Compagnies = form.save(commit=False)
-            Compagnies.id = id
-            Compagnies.save()
-            return HttpResponseRedirect('')
-    else:
-        form = pistesForm(instance=Compagnies)
-    return render(request, "avion/updateCompagnies.html", {"form": form, "id": id})
-
-
-#Types
-def ajoutTypes(request):
-    form = typesForm() # création d'un formulaire vide
-    return render(request,"avion/ajoutTypes.html",{"form" : form})
-
-def traitementTypesAjout(request):
-    if request.method == "POST":
-        tform = compagniesForm(request.POST, request.FILES)
-        if tform.is_valid():
-            Types = tform.save()
-            return render(request, "avion/afficheTypes.html", {"Types": Types})
-        else:
-            return render(request, "avion/ajoutTypes.html", {"form": tform})
-    else:
-        return HttpResponseRedirect(reverse('ajoutTypes'))
-
-def traitementTypesModif(request, id):
-    tform = typesForm(request.POST, request.FILES)
-    if tform.is_valid():
-        Types = tform.save(commit=False)
-        Types.id = id
-        Types.save()
-        return render(request, "avion/afficheTypes.html", {"Types": Types})
-    else:
-        return render(request, "avion/updateTypes.html", {"form": tform, "id": id})
-
-def readTypes(request, id):
-    Types = models.Compagnies.objects.get(pk=id)
-    return render(request,"avion/afficheTypes.html",{"Types": Types})
-
-
-def updateTypes(request, id):
-    Types = models.Types.objects.get(pk=id)
-    if request.method == "POST":
-        form = typesForm(request.POST)
-        if form.is_valid():
-            Types = form.save(commit=False)
-            Types.id = id
-            Types.save()
-            return HttpResponseRedirect('')
-    else:
-        form = typesForm(instance=Types)
-    return render(request, "avion/updateTypes.html", {"form": form, "id": id})
-
-
-#Avions
 def ajoutAvions(request):
-    form = avionsForm() # création d'un formulaire vide
-    return render(request,"avion/ajoutAvions.html",{"form" : form})
-
-def traitementAvionsAjout(request):
     if request.method == "POST":
-        aform = avionsForm(request.POST, request.FILES)
-        if aform.is_valid():
-            Avions = aform.save()
-            return render(request, "avion/afficheAvions.html", {"Avions": Avions})
-        else:
-            return render(request, "avion/ajoutAvions.html", {"form": aform})
+        form = avionsForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('avion:afficheAvions')
     else:
-        return HttpResponseRedirect(reverse('ajoutAvions'))
-
-def traitementAvionsModif(request, id):
-    aform = avionsForm(request.POST, request.FILES)
-    if aform.is_valid():
-        Avions = aform.save(commit=False)
-        Avions.id = id
-        Avions.save()
-        return render(request, "avion/afficheAvions.html", {"Avions": Avions})
-    else:
-        return render(request, "avion/updateAvions.html", {"form": aform, "id": id})
-
-def readAvions(request, id):
-    Avions = models.Avions.objects.get(pk=id)
-    return render(request,"avion/afficheAvions.html",{"Avions": Avions})
-
+        form = avionsForm()
+    return render(request, "avion/ajoutAvions.html", {"form": form})
 
 def updateAvions(request, id):
-    Avions = models.Avions.objects.get(pk=id)
+    inst = get_object_or_404(models.Avions, pk=id)
     if request.method == "POST":
-        form = avionsForm(request.POST)
+        form = avionsForm(request.POST, request.FILES, instance=inst)
         if form.is_valid():
-            Avions = form.save(commit=False)
-            Avions.id = id
-            Avions.save()
-            return HttpResponseRedirect('')
+            form.save()
+            return redirect('avion:afficheAvions')
     else:
-        form = avionsForm(instance=Avions)
+        form = avionsForm(instance=inst)
     return render(request, "avion/updateAvions.html", {"form": form, "id": id})
 
-
-
 def deleteAvions(request, id):
-    Region = models.Region.objects.get(pk=id)
+    inst = get_object_or_404(models.Avions, pk=id)
     if request.method == "POST":
-        Region.delete()
-        return HttpResponseRedirect(reverse('index'))
-    return render(request, "avion/deleteAvions.html", {"Region": Region})
+        inst.delete()
+        return redirect('avion:afficheAvions')
+    return render(request, "avion/deleteAvions.html", {"object": inst})
 
+# –– Compagnies ––
+def afficheCompagnies(request):
+    qs = models.Compagnies.objects.all()
+    return render(request, "avion/afficheCompagnies.html", {"object_list": qs})
 
-#Vols
+def ajoutCompagnies(request):
+    if request.method == "POST":
+        form = compagniesForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('avion:afficheCompagnies')
+    else:
+        form = compagniesForm()
+    return render(request, "avion/ajoutCompagnies.html", {"form": form})
+
+def updateCompagnies(request, id):
+    inst = get_object_or_404(models.Compagnies, pk=id)
+    if request.method == "POST":
+        form = compagniesForm(request.POST, request.FILES, instance=inst)
+        if form.is_valid():
+            form.save()
+            return redirect('avion:afficheCompagnies')
+    else:
+        form = compagniesForm(instance=inst)
+    return render(request, "avion/updateCompagnies.html", {"form": form, "id": id})
+
+def deleteCompagnies(request, id):
+    inst = get_object_or_404(models.Compagnies, pk=id)
+    if request.method == "POST":
+        inst.delete()
+        return redirect('avion:afficheCompagnies')
+    return render(request, "avion/deleteCompagnies.html", {"object": inst})
+
+# –– Pistes ––
+def affichePistes(request):
+    qs = models.Pistes.objects.all()
+    return render(request, "avion/affichePistes.html", {"object_list": qs})
+
+def ajoutPistes(request):
+    if request.method == "POST":
+        form = pistesForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('avion:affichePistes')
+    else:
+        form = pistesForm()
+    return render(request, "avion/ajoutPistes.html", {"form": form})
+
+def updatePistes(request, id):
+    inst = get_object_or_404(models.Pistes, pk=id)
+    if request.method == "POST":
+        form = pistesForm(request.POST, request.FILES, instance=inst)
+        if form.is_valid():
+            form.save()
+            return redirect('avion:affichePistes')
+    else:
+        form = pistesForm(instance=inst)
+    return render(request, "avion/updatePistes.html", {"form": form, "id": id})
+
+def deletePistes(request, id):
+    inst = get_object_or_404(models.Pistes, pk=id)
+    if request.method == "POST":
+        inst.delete()
+        return redirect('avion:affichePistes')
+    return render(request, "avion/deletePistes.html", {"object": inst})
+
+# –– Types ––
+def afficheTypes(request):
+    qs = models.Types.objects.all()
+    return render(request, "avion/afficheTypes.html", {"object_list": qs})
+
+def ajoutTypes(request):
+    if request.method == "POST":
+        form = typesForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('avion:afficheTypes')
+    else:
+        form = typesForm()
+    return render(request, "avion/ajoutTypes.html", {"form": form})
+
+def updateTypes(request, id):
+    inst = get_object_or_404(models.Types, pk=id)
+    if request.method == "POST":
+        form = typesForm(request.POST, request.FILES, instance=inst)
+        if form.is_valid():
+            form.save()
+            return redirect('avion:afficheTypes')
+    else:
+        form = typesForm(instance=inst)
+    return render(request, "avion/updateTypes.html", {"form": form, "id": id})
+
+def deleteTypes(request, id):
+    inst = get_object_or_404(models.Types, pk=id)
+    if request.method == "POST":
+        inst.delete()
+        return redirect('avion:afficheTypes')
+    return render(request, "avion/deleteTypes.html", {"object": inst})
+
+# –– Vols ––
+def afficheVols(request):
+    qs = models.Vols.objects.all()
+    return render(request, "avion/afficheVols.html", {"object_list": qs})
+
 def ajoutVols(request):
-    form = volsForm() # création d'un formulaire vide
-    return render(request,"avion/ajoutVols.html",{"form" : form})
-
-def traitementVolsAjout(request):
     if request.method == "POST":
-        vform = volsForm(request.POST, request.FILES)
-        if vform.is_valid():
-            Vols = vform.save()
-            return render(request, "avion/afficheVols.html", {"Vols": Vols})
-        else:
-            return render(request, "avion/ajoutVols.html", {"form": vform})
+        form = volsForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('avion:afficheVols')
     else:
-        return HttpResponseRedirect(reverse('ajoutVols'))
-
-def traitementVolsModif(request, id):
-    vform = volsForm(request.POST, request.FILES)
-    if vform.is_valid():
-        Vols = vform.save(commit=False)
-        Vols.id = id
-        Vols.save()
-        return render(request, "avion/afficheVols.html", {"Vols": Vols})
-    else:
-        return render(request, "avion/updateVols.html", {"form": vform, "id": id})
-
-def readVols(request, id):
-    Vols = models.Vols.objects.get(pk=id)
-    return render(request,"avion/afficheVols.html",{"Vols": Vols})
-
+        form = volsForm()
+    return render(request, "avion/ajoutVols.html", {"form": form})
 
 def updateVols(request, id):
-    Vols = models.Vols.objects.get(pk=id)
+    inst = get_object_or_404(models.Vols, pk=id)
     if request.method == "POST":
-        form = volsForm(request.POST)
+        form = volsForm(request.POST, request.FILES, instance=inst)
         if form.is_valid():
-            Vols = form.save(commit=False)
-            Vols.id = id
-            Vols.save()
-            return HttpResponseRedirect('')
+            form.save()
+            return redirect('avion:afficheVols')
     else:
-        form = volsForm(instance=Vols)
+        form = volsForm(instance=inst)
     return render(request, "avion/updateVols.html", {"form": form, "id": id})
 
-
-
 def deleteVols(request, id):
-    Vols = models.Vols.objects.get(pk=id)
+    inst = get_object_or_404(models.Vols, pk=id)
     if request.method == "POST":
-        Vols.delete()
-        return HttpResponseRedirect(reverse('index'))
-    return render(request, "avion/deleteVols.html", {"Vols": Vols})
+        inst.delete()
+        return redirect('avion:afficheVols')
+    return render(request, "avion/deleteVols.html", {"object": inst})

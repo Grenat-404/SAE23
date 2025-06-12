@@ -45,4 +45,4 @@ class Vols(models.Model):
     aeroports_arr = models.ForeignKey('Aeroports', on_delete=models.CASCADE, related_name='vols_arrivee')
     h_arr = models.DateTimeField()
     def __str__(self):
-        return self.avion
+        return self.avions

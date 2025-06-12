@@ -1,10 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends 'base.html' %}
+{% block title %}Liste des avions{% endblock %}
+{% block content %}
+<h1>Liste des avions</h1>
+<a class="btn" href="{% url 'avion:ajoutAeroports' %}">Ajouter un avion</a>
+<table>
+  <thead>
+    <tr><th>Nom</th><th>Compagnie</th><th>Type</th><th>Actions</th></tr>
+  </thead>
+  <tbody>
+    {% for plane in object_list %}
+    <tr>
+      <td>{{ plane.nom }}</td>
+      <td>{{ plane.compagnie.nom }}</td>
+      <td>{{ plane.type_avion }}</td>
+      <td>
+        <a href="{% url 'avion:updateAeroports' plane.pk %}">✏️</a>
+        <a href="{% url 'avion:deleteAeroports' plane.pk %}">🗑️</a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4">Aucun avion.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

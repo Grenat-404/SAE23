@@ -1,49 +1,25 @@
-{% extends "base.html" %}
-
-{% block title %}Détails de la Région{% endblock %}
-{% block navbar %}
-<nav>
-    <a href="{% url 'ajoutPistes' %}">Ajouter une nouvelle piste</a>
-    <a href="{% url 'ajoutVols' %}">Ajouter un nouveau vol</a>
-</nav>
-{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Liste des aéroports{% endblock %}
 {% block content %}
-<div class="aeroports-container">
-    <h1>{{ Aeroports.nom }}</h1>
-
-{% endif %}
-
-    <ul class="aeroports-details">
-        <li><strong>Nom :</strong> {{ Aeroports.nom }}</li>
-        <li><strong>Pays d'appartenance :</strong> {{ Aeroports.pays }}</li>
-    </ul>
-
-    <div class="action-links">
-        <a href="{% url 'updateAeroports' Aeroports.id %}">Modifier l'Aéroports</a>
-        <a href="{% url 'deleteAeroports' Aeroports.id %}">Supprimer l'Aéroports</a>
-        <a href="/">Retour</a>
-    </div>
-</div>
-
-<h2 style="text-align:center; margin-top: 3rem;">Pistes associés</h2>
-<div class="card-container">
-    {% for Pistes in Pistes %}
-        <div class="card">
-            <a href="{% url 'affichePistes' Pistes.id %}">{{ Pistes.num }}</a>
-        </div>
+<h1>Liste des aéroports</h1>
+<a class="btn" href="{% url 'avion:ajoutAeroports' %}">Ajouter un aéroport</a>
+<table>
+  <thead>
+    <tr><th>Nom</th><th>Pays</th><th>Actions</th></tr>
+  </thead>
+  <tbody>
+    {% for airport in object_list %}
+    <tr>
+      <td>{{ airport.nom }}</td>
+      <td>{{ airport.pays }}</td>
+      <td>
+        <a href="{% url 'avion:updateAeroports' airport.pk %}">✏️</a>
+        <a href="{% url 'avion:deleteAeroports' airport.pk %}">🗑️</a>
+      </td>
+    </tr>
     {% empty %}
-        <p>Aucune Piste associé.</p>
+    <tr><td colspan="3">Aucun aéroport.</td></tr>
     {% endfor %}
-</div>
-
-<h2 style="text-align:center; margin-top: 3rem;">Vols associés</h2>
-<div class="card-container">
-    {% for Vols in Vols %}
-        <div class="card">
-            <a href="{% url 'afficheVols' Vols.id %}">{{ Vols.id }}</a>
-        </div>
-    {% empty %}
-        <p>Aucun Vol associé.</p>
-    {% endfor %}
-</div>
+  </tbody>
+</table>
 {% endblock %}
