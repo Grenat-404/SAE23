@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-class Aréoports(models.Model):
+class Areoports(models.Model):
     nom = models.CharField(max_length=100, blank=False)
     pays = models.CharField(max_length=100, blank=False)
     def __str__(self):
@@ -9,7 +9,7 @@ class Aréoports(models.Model):
 
 class Pistes(models.Model):
     num = models.IntegerField(blank=False)
-    aréoports = models.CharField(max_length=100, blank=False)
+    areoports = models.CharField(max_length=100, blank=False)
     longueur = models.IntegerField(blank = False)
     def __str__(self):
         return self.num
@@ -40,9 +40,9 @@ class Avions(models.Model):
 class Vols(models.Model):
     avion = models.CharField(max_length=100, blank=False)
     pilote = models.CharField(max_length=100, blank=False)
-    aréoports_dep = models.CharField(max_length=100, blank=False)
+    areoports_dep = models.CharField(max_length=100, blank=False)
     h_dep = models.DateTimeField()
-    aréoports_arr = models.CharField(max_length=100, blank=False)
+    areoports_arr = models.CharField(max_length=100, blank=False)
     h_arr = models.DateTimeField()
     def __str__(self):
         return self.avion
