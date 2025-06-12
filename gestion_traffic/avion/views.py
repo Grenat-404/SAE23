@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .forms import avionsForm
+from .forms import avionsForm, areoportsForm, compagniesForm, typesForm
 from .forms import pistesForm
 from .forms import volsForm
 from . import models
@@ -143,7 +143,7 @@ def updateCompagnies(request, id):
             Compagnies.save()
             return HttpResponseRedirect('')
     else:
-        form = pistesForm(instance=Pistes)
+        form = pistesForm(instance=Compagnies)
     return render(request, "avion/updateCompagnies.html", {"form": form, "id": id})
 
 
@@ -265,7 +265,7 @@ def traitementVolsAjout(request):
 def traitementVolsModif(request, id):
     vform = volsForm(request.POST, request.FILES)
     if vform.is_valid():
-        Vols = aform.save(commit=False)
+        Vols = vform.save(commit=False)
         Vols.id = id
         Vols.save()
         return render(request, "avion/afficheVols.html", {"Vols": Vols})
@@ -287,7 +287,7 @@ def updateVols(request, id):
             Vols.save()
             return HttpResponseRedirect('')
     else:
-        form = volssForm(instance=Vols)
+        form = volsForm(instance=Vols)
     return render(request, "avion/updateVols.html", {"form": form, "id": id})
 
 

@@ -16,7 +16,7 @@ class Pistes(models.Model):
 
 class Compagnies(models.Model):
     nom = models.CharField(max_length=100, blank=False)
-    description = models.CharField(blank=True)
+    description = models.CharField(max_length=100, blank=True)
     pays_ratt = models.CharField(max_length=100, blank=False)
     def __str__(self):
         return self.nom
@@ -32,7 +32,7 @@ class Types(models.Model):
 
 class Avions(models.Model):
     nom = models.CharField(max_length=100, blank=False)
-    compagnie = models.CharField(blank=True)
+    compagnie = models.CharField(max_length=100, blank=True)
     modele = models.CharField(max_length=100, blank=False)
     def __str__(self):
         return self.nom
