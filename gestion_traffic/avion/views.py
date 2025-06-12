@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .forms import avionsForm, areoportsForm, compagniesForm, typesForm
+from .forms import avionsForm, compagniesForm, typesForm, aeroportsForm
 from .forms import pistesForm
 from .forms import volsForm
 from . import models
@@ -13,48 +13,48 @@ def index(request):
 
 
 #Aréoports
-def ajoutAreoports(request):
-    form = areoportsForm() # création d'un formulaire vide
-    return render(request,"avion/ajoutAreoports.html",{"form" : form})
+def ajoutAeroports(request):
+    form = aeroportsForm() # création d'un formulaire vide
+    return render(request,"avion/ajoutAeroports.html",{"form" : form})
 
-def traitementAreoportsAjout(request):
+def traitementAeroportsAjout(request):
     if request.method == "POST":
-        arform = avionsForm(request.POST, request.FILES)
-        if arform.is_valid():
-            Areoports = arform.save()
-            return render(request, "avion/afficheAreoports.html", {"Areoports": Areoports})
+        aeform = avionsForm(request.POST, request.FILES)
+        if aeform.is_valid():
+            Aeroports = aeform.save()
+            return render(request, "avion/afficheAeroports.html", {"Areoports": Aeroports})
         else:
-            return render(request, "avion/ajoutAreoports.html", {"form": arform})
+            return render(request, "avion/ajoutAeroports.html", {"form": aeform})
     else:
-        return HttpResponseRedirect(reverse('ajoutAreoports'))
+        return HttpResponseRedirect(reverse('ajoutAeroports'))
 
 def traitementAreoportsModif(request, id):
-    arform = areoportsForm(request.POST, request.FILES)
-    if arform.is_valid():
-        Areoports = arform.save(commit=False)
-        Areoports.id = id
-        Areoports.save()
-        return render(request, "avion/afficheAreoports.html", {"Areoports": Areoports})
+    aeform = aeroportsForm(request.POST, request.FILES)
+    if aeform.is_valid():
+        Aeroports = aeform.save(commit=False)
+        Aeroports.id = id
+        Aeroports.save()
+        return render(request, "avion/afficheAeroports.html", {"Aeroports": Aeroports})
     else:
-        return render(request, "avion/updateAreoports.html", {"form": arform, "id": id})
+        return render(request, "avion/updateAeroports.html", {"form": aeform, "id": id})
 
-def readAreoports(request, id):
-    Areoports = models.Areoports.objects.get(pk=id)
-    return render(request,"avion/afficheAreoports.html",{"Areoports": Areoports})
+def readAeroports(request, id):
+    Aeroports = models.Aeroports.objects.get(pk=id)
+    return render(request,"avion/afficheAeroports.html",{"Aeroports": Aeroports})
 
 
-def updateAreoports(request, id):
-    Areoports = models.Areoports.objects.get(pk=id)
+def updateAeroports(request, id):
+    Aeroports = models.Aeroports.objects.get(pk=id)
     if request.method == "POST":
-        form = areoportsForm(request.POST)
+        form = aeroportsForm(request.POST)
         if form.is_valid():
-            Areoports = form.save(commit=False)
-            Areoports.id = id
-            Areoports.save()
+            Aeroports = form.save(commit=False)
+            Aeroports.id = id
+            Aeroports.save()
             return HttpResponseRedirect('')
     else:
-        form = areoportsForm(instance=Areoports)
-    return render(request, "avion/updateAreoports.html", {"form": form, "id": id})
+        form = aeroportsForm(instance=Aeroports)
+    return render(request, "avion/updateAeroports.html", {"form": form, "id": id})
 
 
 #Pistes

@@ -3,9 +3,9 @@ from django.utils.translation import gettext_lazy as _
 from . import models
 
 
-class areoportsForm(ModelForm):
+class aeroportsForm(ModelForm):
     class Meta:
-        model = models.Areoports
+        model = models.Aeroports
         fields = ('nom', 'pays')
         labels = {
         'nom' : _('Nom'),
@@ -15,10 +15,10 @@ class areoportsForm(ModelForm):
 class pistesForm(ModelForm):
     class Meta:
         model = models.Pistes
-        fields = ('num', 'areoports', 'longueur')
+        fields = ('num', 'aeroports', 'longueur')
         labels = {
         'num' : _('Numéro de la piste'),
-        'aréoports' : _("Aréoport d'appartennance") ,
+        'aeroports' : _("Aéroport d'appartennance") ,
         'longueur' : _('Longueur de la piste'),
         }
 
@@ -58,12 +58,12 @@ class avionsForm(ModelForm):
 class volsForm(ModelForm):
     class Meta:
         model = models.Vols
-        fields = ('avions', 'pilote', 'areoports_dep', 'h_dep', 'areoports_arr', 'h_arr')
+        fields = ('avions', 'pilote', 'aeroports_dep', 'h_dep', 'aeroports_arr', 'h_arr')
         labels = {
         'avions' : _('Avion'),
         'pilote' : _('Pilote du vol') ,
-        'areoports_dep' : _('aéroport de départ'),
+        'aeroports_dep' : _('aéroport de départ'),
         'h_dep' : _('date et heure de départ'),
-        'areoports_arr' : _("aéroport d'arrivée"),
+        'aeroports_arr' : _("aéroport d'arrivée"),
         'h_arr' : _("date et heure d'arrivée")
         }
