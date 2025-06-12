@@ -9,7 +9,7 @@ class Areoports(models.Model):
 
 class Pistes(models.Model):
     num = models.IntegerField(blank=False)
-    areoports = models.CharField(max_length=100, blank=False)
+    areoports = models.ForeignKey(Areoports, on_delete=models.CASCADE)
     longueur = models.IntegerField(blank = False)
     def __str__(self):
         return self.num
@@ -32,17 +32,17 @@ class Types(models.Model):
 
 class Avions(models.Model):
     nom = models.CharField(max_length=100, blank=False)
-    compagnie = models.CharField(max_length=100, blank=True)
+    compagnie = models.ForeignKey(Compagnies, on_delete=models.CASCADE)
     modele = models.CharField(max_length=100, blank=False)
     def __str__(self):
         return self.nom
 
 class Vols(models.Model):
-    avions = models.CharField(max_length=100, blank=False)
+    avions = models.ForeignKey('Avions',on_delete=models.CASCADE, default=None)
     pilote = models.CharField(max_length=100, blank=False)
-    areoports_dep = models.CharField(max_length=100, blank=False)
+    areoports_dep = models.ForeignKey(Areoports, on_delete=models.CASCADE, related_name='vols_depart')
     h_dep = models.DateTimeField()
-    areoports_arr = models.CharField(max_length=100, blank=False)
+    areoports_arr = models.ForeignKey(Areoports, on_delete=models.CASCADE, related_name='vols_arrivee')
     h_arr = models.DateTimeField()
     def __str__(self):
         return self.avion
