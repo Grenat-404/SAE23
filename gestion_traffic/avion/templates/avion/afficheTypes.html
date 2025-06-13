@@ -20,8 +20,8 @@
       <td>{{ t.modele }}</td>
       <td>{{ t.longueur }}</td>
       <td>
-        {% if type.images %}
-          <img src="{{ type.images.url }}" alt="Avion" style="height: 50px;">
+        {% if t.images %}
+          <img src="{{ t.images.url }}" alt="Avion" style="height: 50px;">
         {% else %}
           <em>Aucune</em>
         {% endif %}

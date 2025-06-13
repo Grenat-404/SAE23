@@ -76,7 +76,11 @@ WSGI_APPLICATION = 'gestion_traffic.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': 'trafic_aerien',
+        'USER': 'django',
+        'PASSWORD': 'django',
+        'HOST': '192.168.83.133',
+        'PORT': '3306',
     }
 }
 
@@ -120,7 +124,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
