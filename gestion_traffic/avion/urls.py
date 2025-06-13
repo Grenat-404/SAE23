@@ -45,4 +45,6 @@ urlpatterns = [
     path('flights/<int:id>/edit/', views.updateVols, name='updateVols'),
     path('flights/<int:id>/delete/', views.deleteVols, name='deleteVols'),
     path('vols/<int:vol_id>/fiche/', views.fiche_vol_pdf, name='fiche_vol'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
