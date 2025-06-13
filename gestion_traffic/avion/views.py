@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.http import HttpResponse
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
-from .models import Vols
+from .models import Vols, Pistes
 
 
 def index(request):
@@ -29,8 +29,8 @@ def fiche_vol_pdf(request, vol_id):
 
     p = canvas.Canvas(response, pagesize=A4)
     width, height = A4
-
     y = height - 100
+
     p.setFont("Helvetica-Bold", 16)
     p.drawString(100, y, f"Fiche de Vol #{vol.id}")
 
@@ -46,9 +46,15 @@ def fiche_vol_pdf(request, vol_id):
 
     y -= 25
     p.drawString(100, y, f"Aéroport de départ : {vol.aeroports_dep.nom} ({vol.h_dep.strftime('%d/%m/%Y %H:%M')})")
+    longueurs_dep = Pistes.objects.filter(aeroports=vol.aeroports_dep).values_list('longueur', flat=True)
+    y -= 20
+    p.drawString(120, y, f"Pistes : {', '.join(str(l) + ' m' for l in longueurs_dep) if longueurs_dep else 'Aucune'}")
 
     y -= 25
     p.drawString(100, y, f"Aéroport d'arrivée : {vol.aeroports_arr.nom} ({vol.h_arr.strftime('%d/%m/%Y %H:%M')})")
+    longueurs_arr = Pistes.objects.filter(aeroports=vol.aeroports_arr).values_list('longueur', flat=True)
+    y -= 20
+    p.drawString(120, y, f"Pistes : {', '.join(str(l) + ' m' for l in longueurs_arr) if longueurs_arr else 'Aucune'}")
 
     p.showPage()
     p.save()
