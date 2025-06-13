@@ -30,6 +30,9 @@
         <a href="{% url 'avion:updateVols' flight.pk %}">✏️</a>
         <a href="{% url 'avion:deleteVols' flight.pk %}">🗑️</a>
       </td>
+      <td>
+        <a href="{% url 'avion:fiche_vol' flight.id %}" class="btn btn-sm btn-secondary">📄 Télécharger</a>
+      </td>
     </tr>
     {% empty %}
     <tr><td colspan="5">Aucun vol.</td></tr>

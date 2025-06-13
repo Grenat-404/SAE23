@@ -2,6 +2,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .forms import aeroportsForm, avionsForm, compagniesForm, pistesForm, typesForm, volsForm
 from . import models
 from django.urls import reverse
+from django.http import HttpResponse
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from .models import Vols
+
 
 def index(request):
     apts = models.Aeroports.objects.all()
@@ -15,6 +20,39 @@ def _handle_crud(request, Model, FormClass, template_list, template_add,
     Mais ici on l'appelle manuellement dans chaque view pour plus de clarté.
     """
     pass  # on n'utilise pas dans cette version, on garde views séparées
+
+def fiche_vol_pdf(request, vol_id):
+    vol = Vols.objects.get(pk=vol_id)
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="fiche_vol_{vol_id}.pdf"'
+
+    p = canvas.Canvas(response, pagesize=A4)
+    width, height = A4
+
+    y = height - 100
+    p.setFont("Helvetica-Bold", 16)
+    p.drawString(100, y, f"Fiche de Vol #{vol.id}")
+
+    p.setFont("Helvetica", 12)
+    y -= 40
+    p.drawString(100, y, f"Avion : {vol.avions.nom} ({vol.avions.modele.marque} {vol.avions.modele.modele})")
+
+    y -= 25
+    p.drawString(100, y, f"Compagnie : {vol.avions.compagnie.nom}")
+
+    y -= 25
+    p.drawString(100, y, f"Pilote : {vol.pilote}")
+
+    y -= 25
+    p.drawString(100, y, f"Aéroport de départ : {vol.aeroports_dep.nom} ({vol.h_dep.strftime('%d/%m/%Y %H:%M')})")
+
+    y -= 25
+    p.drawString(100, y, f"Aéroport d'arrivée : {vol.aeroports_arr.nom} ({vol.h_arr.strftime('%d/%m/%Y %H:%M')})")
+
+    p.showPage()
+    p.save()
+    return response
 
 # –– Aéroports ––
 def afficheAeroports(request):

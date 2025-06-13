@@ -44,4 +44,5 @@ urlpatterns = [
     path('flights/add/', views.ajoutVols, name='ajoutVols'),
     path('flights/<int:id>/edit/', views.updateVols, name='updateVols'),
     path('flights/<int:id>/delete/', views.deleteVols, name='deleteVols'),
+    path('vols/<int:vol_id>/fiche/', views.fiche_vol_pdf, name='fiche_vol'),
 ]

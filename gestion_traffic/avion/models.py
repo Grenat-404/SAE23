@@ -2,6 +2,8 @@ from datetime import timedelta
 
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.timezone import make_aware, is_naive
+from datetime import timedelta
 
 # Create your models here.
 class Aeroports(models.Model):
@@ -53,51 +55,49 @@ class Vols(models.Model):
 
     def clean(self):
         super().clean()
+        erreurs = {}
 
-        # Vérifie que l'écart entre départ et arrivée du vol est >= 10 minutes
+        # Vérifie durée minimale
         if self.h_arr < self.h_dep + timedelta(minutes=10):
-            raise ValidationError("Le vol doit durer au moins 10 minutes.")
+            erreurs['h_arr'] = "Le vol doit durer au moins 10 minutes."
 
-        # Plage de temps pour comparaison (±10 minutes)
+        if is_naive(self.h_dep):
+            self.h_dep = make_aware(self.h_dep)
+        if is_naive(self.h_arr):
+            self.h_arr = make_aware(self.h_arr)
+
+        # Vérifie chevauchement
         dep_min = self.h_dep - timedelta(minutes=10)
         dep_max = self.h_dep + timedelta(minutes=10)
-
         arr_min = self.h_arr - timedelta(minutes=10)
         arr_max = self.h_arr + timedelta(minutes=10)
 
-        # Vols déjà existants qui se chevauchent en départ
         conflits_dep = Vols.objects.filter(
             aeroports_dep=self.aeroports_dep,
             h_dep__range=(dep_min, dep_max)
         ).exclude(pk=self.pk)
-
         if conflits_dep.exists():
-            raise ValidationError("Un autre vol part déjà de cet aéroport à moins de 10 minutes d'écart.")
+            erreurs['h_dep'] = "Conflit : un vol décolle déjà de cet aéroport dans les 10 minutes."
 
-        # Vols déjà existants qui se chevauchent en arrivée
         conflits_arr = Vols.objects.filter(
             aeroports_arr=self.aeroports_arr,
             h_arr__range=(arr_min, arr_max)
         ).exclude(pk=self.pk)
-
         if conflits_arr.exists():
-            raise ValidationError("Un autre vol arrive déjà à cet aéroport à moins de 10 minutes d'écart.")
+            erreurs['h_arr'] = "Conflit : un vol atterrit déjà à cet aéroport dans les 10 minutes."
 
-        # Vérifie la compatibilité des pistes avec le type d'avion
+        # Vérifie les pistes disponibles
         piste_min = self.avions.modele.longueur
 
-        # Départ
-        pistes_dep = Pistes.objects.filter(aeroports=self.aeroports_dep, longueur__gte=piste_min)
-        if not pistes_dep.exists():
-            raise ValidationError(
-                f"L'aéroport de départ '{self.aeroports_dep}' ne dispose d'aucune piste suffisamment longue pour l'avion sélectionné.")
+        if not Pistes.objects.filter(aeroports=self.aeroports_dep, longueur__gte=piste_min).exists():
+            erreurs['aeroports_dep'] = "Pas de piste assez longue à l'aéroport de départ."
 
-        # Arrivée
-        pistes_arr = Pistes.objects.filter(aeroports=self.aeroports_arr, longueur__gte=piste_min)
-        if not pistes_arr.exists():
-            raise ValidationError(
-                f"L'aéroport d'arrivée '{self.aeroports_arr}' ne dispose d'aucune piste suffisamment longue pour l'avion sélectionné.")
+        if not Pistes.objects.filter(aeroports=self.aeroports_arr, longueur__gte=piste_min).exists():
+            erreurs['aeroports_arr'] = "Pas de piste assez longue à l'aéroport d'arrivée."
 
-        def save(self, *args, **kwargs):
-            self.full_clean()
-            super().save(*args, **kwargs)
+        if erreurs:
+            raise ValidationError(erreurs)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
