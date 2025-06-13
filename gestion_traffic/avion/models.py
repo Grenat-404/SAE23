@@ -52,8 +52,6 @@ class Vols(models.Model):
         return f"{self.avions.nom} - {self.h_dep.strftime('%Y-%m-%d %H:%M')}"
 
     def clean(self):
-        from django.utils.timezone import make_aware, is_naive
-
         super().clean()
 
         # Vérifie que l'écart entre départ et arrivée du vol est >= 10 minutes
@@ -85,6 +83,6 @@ class Vols(models.Model):
         if conflits_arr.exists():
             raise ValidationError("Un autre vol arrive déjà à cet aéroport à moins de 10 minutes d'écart.")
 
-        def save(self, *args, **kwargs):
-            self.full_clean()
-            super().save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        self.full_clean()  # Assure que clean() est bien exécutée
+        super().save(*args, **kwargs)

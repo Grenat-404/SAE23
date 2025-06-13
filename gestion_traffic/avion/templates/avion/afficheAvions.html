@@ -12,7 +12,7 @@
     <tr>
       <td>{{ plane.nom }}</td>
       <td>{{ plane.compagnie.nom }}</td>
-      <td>{{ plane.type_avion }}</td>
+      <td>{{ plane.modele }}</td>
       <td>
         <a href="{% url 'avion:updateAeroports' plane.pk %}">✏️</a>
         <a href="{% url 'avion:deleteAeroports' plane.pk %}">🗑️</a>

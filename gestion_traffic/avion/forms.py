@@ -37,9 +37,9 @@ class typesForm(ModelForm):
         model = models.Types
         fields = ('marque', 'modele', 'description', 'images', 'longueur')
         labels = {
-        'marque' : _('Nom de Région'),
-        'modele' : _('Date de Création') ,
-        'description' : _('Nombre de Départements'),
+        'marque' : _('Marque'),
+        'modele' : _('Modèle') ,
+        'description' : _('Description'),
         'images' : _('URL de la photo'),
         'longueur': _(' longueur de piste nécessaire'),
         }
