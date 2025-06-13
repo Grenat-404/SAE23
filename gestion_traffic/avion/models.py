@@ -83,6 +83,21 @@ class Vols(models.Model):
         if conflits_arr.exists():
             raise ValidationError("Un autre vol arrive déjà à cet aéroport à moins de 10 minutes d'écart.")
 
-    def save(self, *args, **kwargs):
-        self.full_clean()  # Assure que clean() est bien exécutée
-        super().save(*args, **kwargs)
+        # Vérifie la compatibilité des pistes avec le type d'avion
+        piste_min = self.avions.modele.longueur
+
+        # Départ
+        pistes_dep = Pistes.objects.filter(aeroports=self.aeroports_dep, longueur__gte=piste_min)
+        if not pistes_dep.exists():
+            raise ValidationError(
+                f"L'aéroport de départ '{self.aeroports_dep}' ne dispose d'aucune piste suffisamment longue pour l'avion sélectionné.")
+
+        # Arrivée
+        pistes_arr = Pistes.objects.filter(aeroports=self.aeroports_arr, longueur__gte=piste_min)
+        if not pistes_arr.exists():
+            raise ValidationError(
+                f"L'aéroport d'arrivée '{self.aeroports_arr}' ne dispose d'aucune piste suffisamment longue pour l'avion sélectionné.")
+
+        def save(self, *args, **kwargs):
+            self.full_clean()
+            super().save(*args, **kwargs)
