@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.http import HttpResponse
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
-from .models import Vols, Pistes
+from .models import Vols, Pistes, Aeroports
 
 
 def index(request):
@@ -62,7 +62,11 @@ def fiche_vol_pdf(request, vol_id):
 
 # –– Aéroports ––
 def afficheAeroports(request):
-    qs = models.Aeroports.objects.all()
+    qs = Aeroports.objects.all()
+    if qs:
+        print("Il y a des aéroports")
+    else:
+        print("Il n'y a pas d'aéroports")
     return render(request, "avion/afficheAeroports.html", {"object_list": qs})
 
 def ajoutAeroports(request):

@@ -11,6 +11,9 @@ class Aeroports(models.Model):
     pays = models.CharField(max_length=100, blank=False)
     def __str__(self):
         return self.nom
+    class Meta:
+        managed = False
+        db_table = 'aeroports'
 
 class Pistes(models.Model):
     num = models.IntegerField(blank=False)
@@ -19,12 +22,21 @@ class Pistes(models.Model):
     def __str__(self):
         return self.num
 
+    class Meta:
+        managed = False
+        db_table = 'pistes_atterrissage'
+
+
 class Compagnies(models.Model):
     nom = models.CharField(max_length=100, blank=False)
     description = models.CharField(max_length=100, blank=True)
     pays_ratt = models.CharField(max_length=100, blank=False)
     def __str__(self):
         return self.nom
+
+    class Meta:
+        managed = False
+        db_table = 'compagnies'
 
 class Types(models.Model):
     marque = models.CharField(max_length=100, blank=False)
@@ -35,12 +47,20 @@ class Types(models.Model):
     def __str__(self):
         return self.marque
 
+    class Meta:
+        managed = False
+        db_table = 'types_avions'
+
 class Avions(models.Model):
     nom = models.CharField(max_length=100, blank=False)
     compagnie = models.ForeignKey('Compagnies', on_delete=models.CASCADE)
     modele = models.ForeignKey('Types', on_delete=models.CASCADE)
     def __str__(self):
         return self.nom
+
+    class Meta:
+        managed = False
+        db_table = 'avions'
 
 class Vols(models.Model):
     avions = models.ForeignKey('Avions', on_delete=models.CASCADE, default=None)
@@ -52,6 +72,10 @@ class Vols(models.Model):
 
     def __str__(self):
         return f"{self.avions.nom} - {self.h_dep.strftime('%Y-%m-%d %H:%M')}"
+
+    class Meta:
+        managed = False
+        db_table = 'vols'
 
     def clean(self):
         super().clean()
